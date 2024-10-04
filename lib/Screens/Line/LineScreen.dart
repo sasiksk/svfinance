@@ -4,6 +4,10 @@ import 'package:svfinance/CustomTextField.dart';
 import 'package:svfinance/operations/Line_operations.dart';
 
 class LineScreen extends StatefulWidget {
+  final Map<String, dynamic>? entry; // Add this line
+
+  LineScreen({this.entry}); // Update the constructor
+
   @override
   _LineScreenState createState() => _LineScreenState();
 }
@@ -12,6 +16,15 @@ class _LineScreenState extends State<LineScreen> {
   final TextEditingController _lineIdController = TextEditingController();
   final TextEditingController _lineNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.entry != null) {
+      _lineIdController.text = widget.entry!['Line_id'];
+      _lineNameController.text = widget.entry!['Line_Name'];
+    }
+  }
 
   @override
   void dispose() {

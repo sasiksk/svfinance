@@ -89,4 +89,39 @@ class InvestmentOperations {
       }
     });
   }
+
+  static Future<Map<String, dynamic>> getInvestmentTotals() async {
+    final db = await DatabaseHelper.getDatabase();
+    final result = await db.query('InvestmentTotal');
+    if (result.isNotEmpty) {
+      return {
+        'inv_total': result.first['Inv_Total'],
+        'inv_remaining': result.first['Inv_Remaing'],
+      };
+    } else {
+      return {
+        'inv_total': 0,
+        'inv_remaining': 0,
+      };
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getInvestmentEntries() async {
+    final db = await DatabaseHelper.getDatabase();
+    final result = await db.query('InvestmentScreen');
+    final List<Map<String, dynamic>> entries = result;
+
+    for (var entry in entries) {
+      final sumResult = await db.rawQuery('''
+        SELECT SUM(Inv_Remaing) as sum_remaining
+        FROM InvestmentTotal
+        WHERE Line_id = ?
+      ''', [entry['Line_id']]);
+      if (sumResult.isNotEmpty) {
+        entry['sum_remaining'] = sumResult.first['sum_remaining'];
+      }
+    }
+
+    return entries;
+  }
 }

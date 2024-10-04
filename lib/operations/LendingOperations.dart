@@ -71,17 +71,21 @@ class LendingOperations {
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+
+      // Insert the corresponding entry into the LentAmt table
       await txn.insert(
         'LentAmt',
         {
           'Len_id': lendingId,
-          'TotalAmt': amountLent,
+          'TotalAmt': totalAmountPayable,
           'PaidAmt': 0.0,
           'PayableAmt': totalAmountPayable,
           'DaysRemaining': dueLength,
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+
+      // Calculate profit and insert into the Profit table
       final double profit = totalAmountPayable - amountLent;
       await txn.insert(
         'Profit',
@@ -97,5 +101,26 @@ class LendingOperations {
   static Future<List<Map<String, dynamic>>> getAllLendings() async {
     final db = await DatabaseHelper.getDatabase();
     return await db.query('Lending');
+  }
+
+  static Future<void> updateDaysRemaining() async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> lentAmtEntries = await db.query('LentAmt');
+
+    for (var entry in lentAmtEntries) {
+      final dueDateStr = entry['Due_date'];
+      if (dueDateStr != null) {
+        final dueDate = DateTime.parse(dueDateStr);
+        final today = DateTime.now();
+        final daysRemaining = dueDate.difference(today).inDays;
+
+        await db.update(
+          'LentAmt',
+          {'DaysRemaining': daysRemaining},
+          where: 'Len_id = ?',
+          whereArgs: [entry['Len_id']],
+        );
+      }
+    }
   }
 }

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/Screens/CaptialScreenHome.dart';
+import 'package:svfinance/Screens/Captial/CaptialScreenHome.dart';
+import 'package:svfinance/Screens/CollectionHomeScreen.dart';
 import 'package:svfinance/Screens/CollectionScreen.dart';
 import 'package:svfinance/Screens/CollectionScreen2.dart';
 import 'package:svfinance/Screens/DailyReportScreen.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
+import 'package:svfinance/Screens/Investment/InvestmentHomeScreen.dart';
 import 'package:svfinance/Screens/Investment_Screen.dart';
 import 'package:svfinance/Screens/LendingScreen.dart';
-import 'package:svfinance/Screens/LineScreen.dart';
-import 'package:svfinance/Screens/CaptitalScreen2.dart';
+import 'package:svfinance/Screens/Line/LineScreenHome.dart';
+
+import 'package:svfinance/Screens/Captial/CaptitalScreen2.dart';
 import 'package:svfinance/Screens/PartyScreen.dart';
 import 'package:svfinance/Screens/reportScreen.dart';
+import 'package:svfinance/operations/LendingOperations.dart';
 
 class Homescreen extends StatefulWidget {
   Homescreen({super.key});
@@ -26,6 +30,7 @@ class _HomescreenState extends State<Homescreen>
   @override
   void initState() {
     super.initState();
+    _updateDaysRemaining();
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -41,6 +46,10 @@ class _HomescreenState extends State<Homescreen>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _updateDaysRemaining() async {
+    await LendingOperations.updateDaysRemaining();
   }
 
   void _executeInitialCommands() async {
@@ -99,8 +108,8 @@ class _HomescreenState extends State<Homescreen>
                 ),
               ),
               _buildDrawerItem('Capital Screen', CapitalScreenHome()),
-              _buildDrawerItem('Line Screen', LineScreen()),
-              _buildDrawerItem('Investment Screen', InvestmentScreen()),
+              _buildDrawerItem('Line Screen', LineScreenHome()),
+              _buildDrawerItem('Investment Screen', InvestmentHomeScreen()),
               _buildDrawerItem('Party Screen', PartyScreen()),
               _buildDrawerItem('Lending Screen', LendingScreen()),
               _buildDrawerItem('Collection Screen', CollectionScreen()),

@@ -32,4 +32,24 @@ class LineOperations {
     final db = await DatabaseHelper.getDatabase();
     return db.query('Line');
   }
+
+  static Future<Map<String, dynamic>> getTotalAmounts() async {
+    final db = await DatabaseHelper.getDatabase();
+
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT 
+        COUNT(Line_id) as totalLines
+      FROM Line
+    ''');
+
+    if (result.isNotEmpty) {
+      return {
+        'totalLines': result.first['totalLines'] ?? 0,
+      };
+    } else {
+      return {
+        'totalLines': 0,
+      };
+    }
+  }
 }

@@ -1,78 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/Screens/CaptitalScreen2.dart';
+import 'package:svfinance/Screens/CollectionScreen.dart';
+import 'package:svfinance/Screens/CombinedOperations.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
-import 'package:svfinance/operations/CaptialOperations.dart';
+import 'package:svfinance/operations/CollectionOperations.dart';
 
-class CapitalScreenHome extends StatefulWidget {
+class CollectionScreenHome extends StatefulWidget {
   @override
-  _CapitalScreenHomeState createState() => _CapitalScreenHomeState();
+  _CollectionScreenHomeState createState() => _CollectionScreenHomeState();
 }
 
-class _CapitalScreenHomeState extends State<CapitalScreenHome> {
-  Future<List<Map<String, dynamic>>>? capitalEntries;
-  Future<Map<String, dynamic>>? totalAmounts;
+class _CollectionScreenHomeState extends State<CollectionScreenHome> {
+  Future<Map<String, double>>? totalAmounts;
+  Future<List<Map<String, dynamic>>>? partyAmounts;
 
   @override
   void initState() {
     super.initState();
-    loadCapitalEntries();
     loadTotalAmounts();
-  }
-
-  void loadCapitalEntries() {
-    setState(() {
-      capitalEntries = DatabaseHelper.getTableData('Capital');
-    });
+    loadPartyAmounts();
   }
 
   void loadTotalAmounts() {
     setState(() {
-      totalAmounts = CapitalOperations.getTotalAmounts();
+      totalAmounts = CollectionOperations.getTotalAmounts();
     });
   }
 
-  void _navigateToAddScreen() {
-    Navigator.of(context)
-        .push(
-      MaterialPageRoute(
-        builder: (context) => CapitalScreen(),
-      ),
-    )
-        .then((_) {
-      loadCapitalEntries(); // Refresh the list after adding new entry
-      loadTotalAmounts(); // Refresh the total amounts after adding new entry
-    });
-  }
-
-  void _navigateToUpdateScreen(Map<String, dynamic> entry) {
-    Navigator.of(context)
-        .push(
-      MaterialPageRoute(
-        builder: (context) => CapitalScreen(entry: entry),
-      ),
-    )
-        .then((_) {
-      loadCapitalEntries(); // Refresh the list after updating entry
-      loadTotalAmounts(); // Refresh the total amounts after updating entry
+  void loadPartyAmounts() {
+    setState(() {
+      partyAmounts = CombinedOperations.getPartyAmounts();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final cardHeight = mediaQuery.size.height * 0.15;
+    final cardHeight = mediaQuery.size.height * 0.25; // Adjusted height
     final cardWidth = mediaQuery.size.width * 0.9;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Capital Screen'),
+        title: Text('Collection Screen'),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            FutureBuilder<Map<String, dynamic>>(
+            FutureBuilder<Map<String, double>>(
               future: totalAmounts,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -93,11 +68,11 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                       width: cardWidth,
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Capital Investment',
+                            'Collection Summary',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -111,7 +86,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Invested:',
+                                    'Given Amount:',
                                     style: TextStyle(
                                       color: Colors.green,
                                       fontSize: 16,
@@ -119,7 +94,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                     ),
                                   ),
                                   Text(
-                                    '${totalData['cTotal_Amt_Inv']}',
+                                    '₹${totalData['givenAmount']}',
                                     style: TextStyle(
                                       color: Colors.green,
                                       fontSize: 16,
@@ -131,7 +106,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Remaining:',
+                                    'Collected Amount:',
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontSize: 16,
@@ -139,7 +114,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                     ),
                                   ),
                                   Text(
-                                    '${totalData['cTotal_Amt_Rem']}',
+                                    '₹${totalData['collectedAmount']}',
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontSize: 16,
@@ -148,6 +123,16 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                 ],
                               ),
                             ],
+                          ),
+                          SizedBox(height: 8.0),
+                          Center(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // Handle view report action
+                              },
+                              icon: Icon(Icons.report),
+                              label: Text('View Report'),
+                            ),
                           ),
                         ],
                       ),
@@ -159,14 +144,14 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
             SizedBox(height: 16.0),
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: capitalEntries,
+                future: partyAmounts,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No entries available'));
+                    return Center(child: Text('No parties available'));
                   } else {
                     final data = snapshot.data!;
                     return ListView.builder(
@@ -175,13 +160,8 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                         final entry = data[index];
                         return Card(
                           child: ListTile(
-                            title:
-                                Text('Date: ${entry['Date_of_Particulars']}'),
-                            subtitle: Text('Amt Invested: ${entry['Amt_Inv']}'),
-                            trailing: IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () => _navigateToUpdateScreen(entry),
-                            ),
+                            title: Text('Party Name: ${entry['partyName']}'),
+                            trailing: Text('₹${entry['amountToBePaid']}'),
                           ),
                         );
                       },
@@ -192,10 +172,6 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToAddScreen,
-        child: Icon(Icons.add),
       ),
     );
   }
