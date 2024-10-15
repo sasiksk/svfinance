@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/operations/InvestmentOperations.dart';
+import 'package:svfinance/operations/Investmentoperations.dart';
 import 'package:svfinance/Screens/Investment_Screen.dart';
 
 class InvestmentHomeScreen extends StatefulWidget {
@@ -9,7 +9,8 @@ class InvestmentHomeScreen extends StatefulWidget {
 
 class _InvestmentHomeScreenState extends State<InvestmentHomeScreen> {
   late Future<Map<String, dynamic>> _investmentTotals;
-  late Future<List<Map<String, dynamic>>> _investmentEntries;
+  late Future<Map<String, List<Map<String, dynamic>>>>
+      _groupedInvestmentEntries;
 
   @override
   void initState() {
@@ -19,7 +20,8 @@ class _InvestmentHomeScreenState extends State<InvestmentHomeScreen> {
 
   void _loadData() {
     _investmentTotals = InvestmentOperations.getInvestmentTotals();
-    _investmentEntries = InvestmentOperations.getInvestmentEntries();
+    _groupedInvestmentEntries =
+        InvestmentOperations.getGroupedInvestmentEntries();
   }
 
   @override
@@ -39,6 +41,8 @@ class _InvestmentHomeScreenState extends State<InvestmentHomeScreen> {
                   return CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Text('No data available');
                 } else {
                   final totals = snapshot.data!;
                   return Card(
@@ -51,31 +55,51 @@ class _InvestmentHomeScreenState extends State<InvestmentHomeScreen> {
               },
             ),
             Expanded(
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: _investmentEntries,
+              child: FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
+                future: _groupedInvestmentEntries,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Text('No entries available');
                   } else {
-                    final entries = snapshot.data!;
+                    final groupedEntries = snapshot.data!;
                     return ListView.builder(
-                      itemCount: entries.length,
+                      itemCount: groupedEntries.keys.length,
                       itemBuilder: (context, index) {
-                        final entry = entries[index];
+                        final lineId = groupedEntries.keys.elementAt(index);
+                        final investments = groupedEntries[lineId]!;
+                        final lineName = investments.first['Line_Name'];
+                        final totalInvested = investments.fold(
+                            0.0,
+                            (sum, item) =>
+                                sum + (item['Amount_invested'] as double));
+                        final remainingAmount = investments.fold(
+                            0.0,
+                            (sum, item) =>
+                                sum + (item['Inv_Remaing'] as double));
+
                         return Card(
-                          child: ListTile(
-                            title: Text('Line Name: ${entry['Line_name']}'),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    'Date of Investment: ${entry['Date_of_Investment']}'),
-                                Text(
-                                    'Amount Invested: ${entry['Amount_invested']}'),
-                              ],
-                            ),
+                          child: ExpansionTile(
+                            title: Text('Line Name: $lineName (ID: $lineId)'),
+                            children: [
+                              ...investments.map((investment) {
+                                return ListTile(
+                                  title: Text(
+                                      'Date of Investment: ${investment['Date_of_Investment']}'),
+                                  subtitle: Text(
+                                      'Amount Invested: ${investment['Amount_invested']}'),
+                                );
+                              }).toList(),
+                              ListTile(
+                                title: Text(
+                                    'Total Amount Invested: $totalInvested'),
+                                subtitle:
+                                    Text('Remaining Amount: $remainingAmount'),
+                              ),
+                            ],
                           ),
                         );
                       },
@@ -83,7 +107,7 @@ class _InvestmentHomeScreenState extends State<InvestmentHomeScreen> {
                   }
                 },
               ),
-            ),
+            )
           ],
         ),
       ),

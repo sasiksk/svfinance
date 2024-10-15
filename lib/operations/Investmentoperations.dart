@@ -92,11 +92,16 @@ class InvestmentOperations {
 
   static Future<Map<String, dynamic>> getInvestmentTotals() async {
     final db = await DatabaseHelper.getDatabase();
-    final result = await db.query('InvestmentTotal');
+    final result = await db.rawQuery('''
+    SELECT 
+      SUM(Inv_Total) as inv_total, 
+      SUM(Inv_Remaing) as inv_remaining 
+    FROM InvestmentTotal
+  ''');
     if (result.isNotEmpty) {
       return {
-        'inv_total': result.first['Inv_Total'],
-        'inv_remaining': result.first['Inv_Remaing'],
+        'inv_total': result.first['inv_total'],
+        'inv_remaining': result.first['inv_remaining'],
       };
     } else {
       return {
@@ -104,6 +109,36 @@ class InvestmentOperations {
         'inv_remaining': 0,
       };
     }
+  }
+
+  static Future<Map<String, List<Map<String, dynamic>>>>
+      getGroupedInvestmentEntries() async {
+    final db = await DatabaseHelper.getDatabase();
+    final result = await db.rawQuery('''
+    SELECT 
+      InvestmentScreen.Line_id, 
+      Line.Line_Name,
+      InvestmentScreen.Date_of_Investment, 
+      InvestmentScreen.Amount_invested,
+      InvestmentTotal.Inv_Remaing
+    FROM InvestmentScreen
+    JOIN InvestmentTotal ON InvestmentScreen.Line_id = InvestmentTotal.Line_id
+    JOIN Line ON InvestmentScreen.Line_id = Line.Line_id
+  ''');
+
+    final Map<String, List<Map<String, dynamic>>> groupedEntries = {};
+
+    for (var entry in result) {
+      final String lineId =
+          entry['Line_id'].toString(); // Ensure lineId is a String
+      if (!groupedEntries.containsKey(lineId)) {
+        groupedEntries[lineId] = [];
+      }
+      groupedEntries[lineId]!.add(Map<String, dynamic>.from(
+          entry)); // Ensure entry is a Map<String, dynamic>
+    }
+
+    return groupedEntries;
   }
 
   static Future<List<Map<String, dynamic>>> getInvestmentEntries() async {
