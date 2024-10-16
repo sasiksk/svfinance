@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/operations/Investmentoperations.dart';
+import 'package:svfinance/operations/InvestmentOperations.dart';
 import 'package:svfinance/Screens/Investment_Screen.dart';
 
 class InvestmentHomeScreen extends StatefulWidget {
@@ -76,10 +76,10 @@ class _InvestmentHomeScreenState extends State<InvestmentHomeScreen> {
                             0.0,
                             (sum, item) =>
                                 sum + (item['Amount_invested'] as double));
-                        final remainingAmount = investments.fold(
-                            0.0,
-                            (sum, item) =>
-                                sum + (item['Inv_Remaing'] as double));
+
+                        // Fetch the remaining amount directly from InvestmentTotal
+                        final remainingAmount =
+                            investments.first['Inv_Remaing'] as double;
 
                         return Card(
                           child: ExpansionTile(

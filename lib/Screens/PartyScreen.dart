@@ -4,6 +4,20 @@ import 'package:svfinance/operations/Line_operations.dart';
 import 'package:svfinance/operations/PartyOperations.dart';
 
 class PartyScreen extends StatefulWidget {
+  final String? partyId;
+  final String? lineId;
+  final String? partyName;
+  final String? partyPhoneNumber;
+  final String? address;
+
+  PartyScreen({
+    this.partyId,
+    this.lineId,
+    this.partyName,
+    this.partyPhoneNumber,
+    this.address,
+  });
+
   @override
   _PartyScreenState createState() => _PartyScreenState();
 }
@@ -18,6 +32,19 @@ class _PartyScreenState extends State<PartyScreen> {
 
   String? _selectedLineId;
   String _lineName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.partyId != null) {
+      _partyIdController.text = widget.partyId!;
+      _selectedLineId = widget.lineId;
+      _partyNameController.text = widget.partyName!;
+      _partyPhoneNumberController.text = widget.partyPhoneNumber!;
+      _addressController.text = widget.address!;
+      _fetchLineName(widget.lineId!);
+    }
+  }
 
   @override
   void dispose() {
