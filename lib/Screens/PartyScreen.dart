@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/CustomTextField.dart';
-import 'package:svfinance/operations/Line_operations.dart';
-import 'package:svfinance/operations/PartyOperations.dart';
+
+import 'DatabaseHelper.dart';
+import 'package:sqflite/sqflite.dart';
 
 class PartyScreen extends StatefulWidget {
   final String? partyId;
@@ -66,9 +67,10 @@ class _PartyScreenState extends State<PartyScreen> {
   }
 
   Future<void> _fetchLineName(String lineId) async {
-    final lines = await LineOperations.getAllLines();
-    final line =
-        lines.firstWhere((line) => line['Line_id'] == lineId, orElse: () => {});
+    final db = await DatabaseHelper.getDatabase();
+    final lines =
+        await db.query('Line', where: 'Line_id = ?', whereArgs: [lineId]);
+    final line = lines.isNotEmpty ? lines.first : {};
     setState(() {
       _lineName = line['Line_Name'] ?? '';
     });
@@ -76,13 +78,18 @@ class _PartyScreenState extends State<PartyScreen> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
+      final db = await DatabaseHelper.getDatabase();
       try {
-        await PartyOperations.insertParty(
-          _partyIdController.text,
-          _selectedLineId!,
-          _partyNameController.text,
-          _partyPhoneNumberController.text,
-          _addressController.text,
+        await db.insert(
+          'party',
+          {
+            'P_id': _partyIdController.text,
+            'Line_id': _selectedLineId!,
+            'P_Name': _partyNameController.text,
+            'P_phone': _partyPhoneNumberController.text,
+            'P_Address': _addressController.text,
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
         );
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Party entry added successfully')),
@@ -115,7 +122,7 @@ class _PartyScreenState extends State<PartyScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FutureBuilder<List<Map<String, dynamic>>>(
-                  future: LineOperations.getAllLines(),
+                  future: _fetchAllLines(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return CircularProgressIndicator();
@@ -249,5 +256,10 @@ class _PartyScreenState extends State<PartyScreen> {
         ),
       ),
     );
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchAllLines() async {
+    final db = await DatabaseHelper.getDatabase();
+    return await db.query('Line');
   }
 }
