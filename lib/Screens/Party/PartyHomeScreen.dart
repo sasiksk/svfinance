@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'PartyScreen.dart';
-import 'DatabaseHelper.dart';
+import '../DatabaseHelper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PartyHomeScreen extends StatefulWidget {

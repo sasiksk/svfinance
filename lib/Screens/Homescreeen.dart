@@ -10,7 +10,7 @@ import 'package:svfinance/Screens/Investment/InvestmentHomeScreen.dart';
 import 'package:svfinance/Screens/LendingScreen.dart';
 import 'package:svfinance/Screens/Line/LineScreenHome.dart';
 
-import 'package:svfinance/Screens/PartyHomeScreen.dart';
+import 'package:svfinance/Screens/Party/PartyHomeScreen.dart';
 
 import 'package:svfinance/Screens/reportScreen.dart';
 import 'package:svfinance/operations/LendingOperations.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/CustomTextField.dart';
 
-import 'DatabaseHelper.dart';
+import '../DatabaseHelper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class PartyScreen extends StatefulWidget {
