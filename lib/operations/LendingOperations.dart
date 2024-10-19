@@ -123,4 +123,20 @@ class LendingOperations {
       }
     }
   }
+
+  static Future<List<Map<String, dynamic>>> getLendingDetailsByLineId(
+      String lineId) async {
+    final db = await DatabaseHelper.getDatabase();
+    return await db.rawQuery('''
+      SELECT 
+        p.P_Name AS Party_Name,
+        l.Amt_lent,
+        l.Total_Payable_amt,
+        la.DaysRemaining
+      FROM Lending l
+      JOIN party p ON l.P_id = p.P_id
+      JOIN LentAmt la ON l.Len_id = la.Len_id
+      WHERE l.Line_id = ?
+    ''', [lineId]);
+  }
 }

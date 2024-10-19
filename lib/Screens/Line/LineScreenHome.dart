@@ -103,50 +103,20 @@ class _LineScreenHomeState extends State<LineScreenHome> {
                             ),
                           ),
                           SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Total Lines:',
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${totalData['totalLines']}',
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Active Lines:',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${totalData['activeLines']}',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          Text(
+                            'Total Lines:',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${totalData['totalLines']}',
+                            style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
