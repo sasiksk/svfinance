@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:path/path.dart' as path;
 
@@ -185,18 +186,33 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> lentAmtEntries = await db.query('LentAmt');
 
     for (var entry in lentAmtEntries) {
-      final dueDateStr = entry['Due_date'];
-      if (dueDateStr != null) {
-        final dueDate = DateTime.parse(dueDateStr);
-        final today = DateTime.now();
-        final daysRemaining = dueDate.difference(today).inDays;
-
-        await db.update(
-          'LentAmt',
-          {'DaysRemaining': daysRemaining},
+      final lenId = entry['Len_id'];
+      if (lenId != null) {
+        final lendingEntry = await db.query(
+          'Lending',
           where: 'Len_id = ?',
-          whereArgs: [entry['Len_id']],
+          whereArgs: [lenId],
         );
+
+        if (lendingEntry.isNotEmpty) {
+          final dueDateStr = lendingEntry.first['Due_date'];
+          if (dueDateStr != null) {
+            try {
+              final dueDate = DateTime.parse(dueDateStr as String);
+              final today = DateTime.now();
+              final daysRemaining = dueDate.difference(today).inDays;
+
+              await db.update(
+                'LentAmt',
+                {'DaysRemaining': daysRemaining},
+                where: 'Len_id = ?',
+                whereArgs: [lenId],
+              );
+            } catch (e) {
+              print('Error updating days remaining: $e');
+            }
+          }
+        }
       }
     }
   }
