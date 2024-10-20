@@ -38,7 +38,9 @@ class _HomescreenState extends State<Homescreen>
 
   Future<void> _updateDaysRemaining() async {
     try {
-      await LendingOperations.updateDaysRemaining();
+      print("Updating days remaining...");
+      await DatabaseHelper.updateDaysRemaining();
+      print("Days remaining updated successfully.");
     } catch (e) {
       print("Error updating days remaining: $e");
     }
@@ -60,6 +62,7 @@ class _HomescreenState extends State<Homescreen>
     try {
       print("Initializing database...");
       await DatabaseHelper.getDatabase();
+      //await DatabaseHelper.dropDatabase('finance.db');
       print("Database initialized successfully.");
     } catch (e) {
       print("Error initializing database: $e");

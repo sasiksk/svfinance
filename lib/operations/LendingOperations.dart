@@ -40,17 +40,31 @@ class LendingOperations {
 
       final investmentTotalEntry = investmentTotalEntries.first;
       final double invRemaining = investmentTotalEntry['Inv_Remaing'];
+      final double currentLentamt = investmentTotalEntry['Lentamt'];
+      final double currentProfit = investmentTotalEntry['profit'];
+      final double currentTotallineamt = investmentTotalEntry['totallineamt'];
 
       // Check if the remaining investment amount is sufficient
       if (invRemaining < amountLent) {
         throw Exception('Insufficient funds in the line.');
       }
 
-      // Update the remaining investment amount
+      // Calculate new values
       final double newInvRemaining = invRemaining - amountLent;
+      final double newLentamt = currentLentamt + amountLent;
+      final double profit = totalAmountPayable - amountLent;
+      final double newProfit = currentProfit + profit;
+      final double newTotallineamt = newInvRemaining + newLentamt + newProfit;
+
+      // Update the remaining investment amount and other values
       await txn.update(
         'InvestmentTotal',
-        {'Inv_Remaing': newInvRemaining},
+        {
+          'Inv_Remaing': newInvRemaining,
+          'Lentamt': newLentamt,
+          'profit': newProfit,
+          'totallineamt': newTotallineamt,
+        },
         where: 'InvtotalID = ?',
         whereArgs: [investmentTotalEntry['InvtotalID']],
       );
@@ -65,6 +79,7 @@ class LendingOperations {
           'Type': type,
           'Amt_lent': amountLent,
           'Total_Payable_amt': totalAmountPayable,
+          'Profit': profit, // Include profit here
           'Due_length': dueLength,
           'Date_of_lent': dateOfLent,
           'Due_date': dueDate,
@@ -85,8 +100,7 @@ class LendingOperations {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-      // Calculate profit and insert into the Profit table
-      final double profit = totalAmountPayable - amountLent;
+      // Insert the profit into the Profit table
       await txn.insert(
         'Profit',
         {
@@ -103,27 +117,6 @@ class LendingOperations {
     return await db.query('Lending');
   }
 
-  static Future<void> updateDaysRemaining() async {
-    final db = await DatabaseHelper.getDatabase();
-    final List<Map<String, dynamic>> lentAmtEntries = await db.query('LentAmt');
-
-    for (var entry in lentAmtEntries) {
-      final dueDateStr = entry['Due_date'];
-      if (dueDateStr != null) {
-        final dueDate = DateTime.parse(dueDateStr);
-        final today = DateTime.now();
-        final daysRemaining = dueDate.difference(today).inDays;
-
-        await db.update(
-          'LentAmt',
-          {'DaysRemaining': daysRemaining},
-          where: 'Len_id = ?',
-          whereArgs: [entry['Len_id']],
-        );
-      }
-    }
-  }
-
   static Future<List<Map<String, dynamic>>> getLendingDetailsByLineId(
       String lineId) async {
     final db = await DatabaseHelper.getDatabase();
@@ -138,5 +131,21 @@ class LendingOperations {
       JOIN LentAmt la ON l.Len_id = la.Len_id
       WHERE l.Line_id = ?
     ''', [lineId]);
+  }
+
+  static Future<List<Map<String, dynamic>>> getLendingDetailsByLineIdAndPartyId(
+      String lineId, String partyId) async {
+    final db = await DatabaseHelper.getDatabase();
+    return await db.rawQuery('''
+      SELECT 
+        p.P_Name AS Party_Name,
+        l.Amt_lent,
+        l.Total_Payable_amt,
+        la.DaysRemaining
+      FROM Lending l
+      JOIN party p ON l.P_id = p.P_id
+      JOIN LentAmt la ON l.Len_id = la.Len_id
+      WHERE l.Line_id = ? AND l.P_id = ?
+    ''', [lineId, partyId]);
   }
 }

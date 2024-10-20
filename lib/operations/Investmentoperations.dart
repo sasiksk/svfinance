@@ -48,6 +48,9 @@ class InvestmentOperations {
               'Line_id': lineId,
               'Inv_Total': amountInvested,
               'Inv_Remaing': amountInvested,
+              'Lentamt': 0,
+              'profit': 0,
+              'totallineamt': amountInvested,
             },
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
@@ -56,12 +59,15 @@ class InvestmentOperations {
           final existingEntry = existingInvestmentTotalEntries.first;
           final newInvTotal = existingEntry['Inv_Total'] + amountInvested;
           final newInvRemaining = existingEntry['Inv_Remaing'] + amountInvested;
+          final newTotalLineAmt =
+              existingEntry['totallineamt'] + amountInvested;
 
           await txn.update(
             'InvestmentTotal',
             {
               'Inv_Total': newInvTotal,
               'Inv_Remaing': newInvRemaining,
+              'totallineamt': newTotalLineAmt,
             },
             where: 'InvtotalID = ?',
             whereArgs: [existingEntry['InvtotalID']],

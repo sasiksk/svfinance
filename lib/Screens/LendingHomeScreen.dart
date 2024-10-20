@@ -12,7 +12,7 @@ class _LendingHomeScreenState extends State<LendingHomeScreen>
     with SingleTickerProviderStateMixin {
   String? _selectedLineId;
   List<Map<String, dynamic>> _lines = [];
-  List<Map<String, dynamic>> _partyDetails = [];
+  Map<String, List<Map<String, dynamic>>> _groupedPartyDetails = {};
   bool _isLoading = false;
 
   @override
@@ -38,10 +38,26 @@ class _LendingHomeScreenState extends State<LendingHomeScreen>
     });
     final partyDetails =
         await LendingOperations.getLendingDetailsByLineId(lineId);
+    _groupedPartyDetails = _groupByLineName(partyDetails);
     setState(() {
-      _partyDetails = partyDetails;
       _isLoading = false;
     });
+  }
+
+  Map<String, List<Map<String, dynamic>>> _groupByLineName(
+      List<Map<String, dynamic>> partyDetails) {
+    final Map<String, List<Map<String, dynamic>>> groupedData = {};
+    for (var detail in partyDetails) {
+      final lineName = detail['Line_Name'];
+      if (lineName != null) {
+        // Check for null values
+        if (!groupedData.containsKey(lineName)) {
+          groupedData[lineName] = [];
+        }
+        groupedData[lineName]!.add(detail);
+      }
+    }
+    return groupedData;
   }
 
   @override
@@ -84,30 +100,32 @@ class _LendingHomeScreenState extends State<LendingHomeScreen>
                       ],
                     ),
                   ),
-                SizedBox(height: 20),
-                if (_partyDetails.isNotEmpty)
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _partyDetails.length,
-                      itemBuilder: (context, index) {
-                        final party = _partyDetails[index];
-                        return ListTile(
-                          title: Text(party['Party_Name']),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Amount Lent: ${party['Amt_lent']}'),
-                              Text(
-                                  'Total Amount Payable: ${party['Total_Payable_amt']}'),
-                              Text('Days Remaining: ${party['DaysRemaining']}'),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                else if (_selectedLineId != null)
-                  Center(child: Text('No parties found for the selected line')),
+                Expanded(
+                  child: ListView(
+                    children: _groupedPartyDetails.entries.map((entry) {
+                      final lineName = entry.key;
+                      final partyDetails = entry.value;
+                      return ExpansionTile(
+                        title: Text(lineName),
+                        children: partyDetails.map((party) {
+                          return ListTile(
+                            title: Text(party['Party_Name']),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Amount Lent: ${party['Amt_lent']}'),
+                                Text(
+                                    'Total Amount Payable: ${party['Total_Payable_amt']}'),
+                                Text(
+                                    'Days Remaining: ${party['DaysRemaining']}'),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ],
             ),
       floatingActionButton: FloatingActionButton(

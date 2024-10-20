@@ -66,9 +66,25 @@ class _LendingFinancialDetailsScreenState
   }
 
   String _calculateDueDate() {
-    DateTime dateOfLent = DateTime.parse(widget.dateOfLent);
-    DateTime dueDate = dateOfLent.add(Duration(days: widget.dueDays));
-    return DateFormat('yyyy-MM-dd').format(dueDate);
+    try {
+      // Ensure dateOfLent is in a valid format
+      DateTime dateOfLent = DateTime.parse(widget.dateOfLent);
+      
+      // Ensure dueDays is a valid integer
+      if (widget.dueDays is! int) {
+        throw FormatException("dueDays must be an integer");
+      }
+      
+      // Calculate due date
+      DateTime dueDate = dateOfLent.add(Duration(days: widget.dueDays));
+      
+      // Format due date
+      return DateFormat('yyyy-MM-dd').format(dueDate);
+    } catch (e) {
+      // Handle any parsing/formatting errors
+      print("Error calculating due date: $e");
+      return "";
+    }
   }
 
   Future<void> _submitForm() async {

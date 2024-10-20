@@ -53,6 +53,9 @@ class DatabaseHelper {
             Line_id TEXT,
             Inv_Total REAL DEFAULT 0,
             Inv_Remaing REAL,
+            Lentamt REAL,
+            profit REAL,
+            totallineamt REAL,
             FOREIGN KEY (Line_id) REFERENCES Line(Line_id)
           )
         ''');
@@ -77,6 +80,7 @@ class DatabaseHelper {
             Type TEXT,
             Amt_lent REAL,
             Total_Payable_amt REAL,
+            Profit REAL,
             Due_length INTEGER,
             Date_of_lent DATE,
             Due_date DATE,
@@ -115,12 +119,12 @@ class DatabaseHelper {
           )
         ''');
         batch.execute('''
-  CREATE TABLE Profit (
-    Len_id TEXT PRIMARY KEY,
-    Profit REAL,
-    FOREIGN KEY (Len_id) REFERENCES Lending(Len_id)
-  )
-''');
+          CREATE TABLE Profit (
+            Len_id TEXT PRIMARY KEY,
+            Profit REAL,
+            FOREIGN KEY (Len_id) REFERENCES Lending(Len_id)
+          )
+        ''');
         batch.execute('''
           CREATE TABLE Final_Daily_report (
             Final_Dreport_id TEXT PRIMARY KEY,
@@ -174,5 +178,26 @@ class DatabaseHelper {
       String tableName, Map<String, dynamic> entryData) async {
     final db = await getDatabase();
     await db.insert(tableName, entryData);
+  }
+
+  static Future<void> updateDaysRemaining() async {
+    final db = await getDatabase();
+    final List<Map<String, dynamic>> lentAmtEntries = await db.query('LentAmt');
+
+    for (var entry in lentAmtEntries) {
+      final dueDateStr = entry['Due_date'];
+      if (dueDateStr != null) {
+        final dueDate = DateTime.parse(dueDateStr);
+        final today = DateTime.now();
+        final daysRemaining = dueDate.difference(today).inDays;
+
+        await db.update(
+          'LentAmt',
+          {'DaysRemaining': daysRemaining},
+          where: 'Len_id = ?',
+          whereArgs: [entry['Len_id']],
+        );
+      }
+    }
   }
 }
