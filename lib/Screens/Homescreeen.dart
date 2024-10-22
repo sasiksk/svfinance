@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/Captial/CaptialScreenHome.dart';
 import 'package:svfinance/Screens/CollectionScreen.dart';
-import 'package:svfinance/Screens/CollectionScreen2.dart';
 import 'package:svfinance/Screens/DailyReportScreen.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
 import 'package:svfinance/Screens/Investment/InvestmentHomeScreen.dart';
+import 'CollectionScreen3.dart';
 
 import 'package:svfinance/Screens/LendingHomeScreen.dart';
 import 'package:svfinance/Screens/Line/LineScreenHome.dart';
@@ -132,7 +132,7 @@ class _HomescreenState extends State<Homescreen>
             _buildDrawerItem('Lending Screen', LendingHomeScreen()),
             _buildDrawerItem('Collection Screen', CollectionScreen()),
             _buildDrawerItem('Daily Report Screen', DailyReportScreen()),
-            _buildDrawerItem('Bulk Insert', CollectionScreen2()),
+            _buildDrawerItem('Bulk Insert', CollectionHomeScreen()),
             _buildDrawerItem('Report Screen', ReportScreen()),
           ],
         ),

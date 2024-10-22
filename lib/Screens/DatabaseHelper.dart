@@ -216,4 +216,41 @@ class DatabaseHelper {
       }
     }
   }
+
+  static Future<List<String>> getLineNames() async {
+    final db = await getDatabase();
+    final List<Map<String, dynamic>> result =
+        await db.query('Line', columns: ['Line_Name']);
+    return result.map((line) => line['Line_Name'] as String).toList();
+  }
+
+  static Future<List<Map<String, dynamic>>> getLineIdsAndNames() async {
+    final db = await getDatabase();
+    final List<Map<String, dynamic>> result =
+        await db.query('Line', columns: ['Line_id', 'Line_Name']);
+    return result;
+  }
+
+  static Future<List<Map<String, dynamic>>> getPartiesByLine(
+      String lineId) async {
+    final db = await getDatabase();
+    return await db.query(
+      'party',
+      where: 'Line_id = ?',
+      whereArgs: [lineId],
+    );
+  }
+
+  static Future<Map<String, dynamic>?> getLentAmtByLenId(String lenId) async {
+    final db = await getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'LentAmt',
+      where: 'Len_id = ?',
+      whereArgs: [lenId],
+    );
+    if (result.isNotEmpty) {
+      return result.first;
+    }
+    return null;
+  }
 }
