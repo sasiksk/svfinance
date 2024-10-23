@@ -52,7 +52,7 @@ class DatabaseHelper {
           CREATE TABLE InvestmentTotal (
             InvtotalID TEXT PRIMARY KEY,
             Line_id TEXT,
-            Inv_Total REAL DEFAULT 0,
+            Inv_TLotal REAL DEFAULT 0,
             Inv_Remaing REAL,
             Lentamt REAL,
             profit REAL,

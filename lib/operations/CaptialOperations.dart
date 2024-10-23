@@ -113,6 +113,14 @@ class CapitalOperations {
     }
   }
 
-  // Update an existing record in the Capital table
-  // Update an existing record in the Capital table
+  static Future<Map<String, dynamic>> getCapitalTotals() async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> result = await db.query('Capital_Total');
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return {'cTotal_Amt_Inv': 0.0, 'cTotal_Amt_Rem': 0.0};
+    }
+  }
 }
