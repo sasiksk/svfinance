@@ -52,10 +52,12 @@ class DatabaseHelper {
           CREATE TABLE InvestmentTotal (
             InvtotalID TEXT PRIMARY KEY,
             Line_id TEXT,
-            Inv_TLotal REAL DEFAULT 0,
+            Inv_Total REAL DEFAULT 0,
             Inv_Remaing REAL,
             Lentamt REAL,
+            Returnamt REAL,
             profit REAL,
+            expense REAL,
             totallineamt REAL,
             FOREIGN KEY (Line_id) REFERENCES Line(Line_id)
           )
@@ -68,8 +70,10 @@ class DatabaseHelper {
             P_Name TEXT,
             P_phone TEXT,
             P_Address TEXT,
+            Len_id TEXT,
             PRIMARY KEY (P_id, Line_id),
             FOREIGN KEY (Line_id) REFERENCES Line(Line_id)
+            FOREIGN KEY (Len_id) REFERENCES Lending(Len_id)
           )
         ''');
 
@@ -85,6 +89,7 @@ class DatabaseHelper {
             Due_length INTEGER,
             Date_of_lent DATE,
             Due_date DATE,
+            status TEXT,
             FOREIGN KEY (Line_id) REFERENCES Line(Line_id),
             FOREIGN KEY (P_id) REFERENCES party(P_id)
           )

@@ -107,8 +107,13 @@ class _CapitalScreenState extends State<CapitalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.entry == null ? 'Add Capital' : 'Update Capital'),
-        backgroundColor: Colors.blue,
+        title: Text(widget.entry == null ? 'Add Capital' : 'Update Capital',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              color: Colors.white,
+            )),
+        backgroundColor: Color.fromARGB(255, 2, 128, 18),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),

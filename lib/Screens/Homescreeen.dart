@@ -4,13 +4,12 @@ import 'package:svfinance/Screens/CollectionScreen.dart';
 import 'package:svfinance/Screens/DailyReportScreen.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
 import 'package:svfinance/Screens/Investment/InvestmentHomeScreen.dart';
-import 'CollectionScreen3.dart';
-
+import 'package:svfinance/Screens/CollectionScreen3.dart';
 import 'package:svfinance/Screens/LendingHomeScreen.dart';
 import 'package:svfinance/Screens/Line/LineScreenHome.dart';
+
 import 'package:svfinance/Screens/Party/PartyHomeScreen.dart';
 import 'package:svfinance/Screens/reportScreen.dart';
-import 'package:svfinance/operations/LendingOperations.dart';
 
 class Homescreen extends StatefulWidget {
   Homescreen({super.key});
