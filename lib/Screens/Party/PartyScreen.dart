@@ -88,6 +88,7 @@ class _PartyScreenState extends State<PartyScreen> {
             'P_Name': _partyNameController.text,
             'P_phone': _partyPhoneNumberController.text,
             'P_Address': _addressController.text,
+            'Len_id': null,
           },
           conflictAlgorithm: ConflictAlgorithm.replace,
         );

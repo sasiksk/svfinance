@@ -49,7 +49,9 @@ class InvestmentOperations {
               'Inv_Total': amountInvested,
               'Inv_Remaing': amountInvested,
               'Lentamt': 0,
+              'Returnamt': 0, // Set Returnamt to 0
               'profit': 0,
+              'expense': 0, // Set expense to 0
               'totallineamt': amountInvested,
             },
             conflictAlgorithm: ConflictAlgorithm.replace,

@@ -42,7 +42,7 @@ class _NewhomescreenState extends State<Newhomescreen>
     try {
       print("Initializing database...");
       await DatabaseHelper.getDatabase();
-      // await DatabaseHelper.dropDatabase('finance.db');
+      //await DatabaseHelper.dropDatabase('finance.db');
       print("Database initialized successfully.");
     } catch (e) {
       print("Error initializing database: $e");

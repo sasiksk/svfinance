@@ -69,23 +69,43 @@ class LendingOperations {
         whereArgs: [investmentTotalEntry['InvtotalID']],
       );
 
-      // Insert the new lending entry
-      await txn.insert(
-        'Lending',
-        {
-          'Len_id': lendingId,
-          'Line_id': lineId,
-          'P_id': partyId,
-          'Type': type,
-          'Amt_lent': amountLent,
-          'Total_Payable_amt': totalAmountPayable,
-          'Profit': profit, // Include profit here
-          'Due_length': dueLength,
-          'Date_of_lent': dateOfLent,
-          'Due_date': dueDate,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
+      // Check if the party's Len_id is NULL
+      final List<Map<String, dynamic>> partyResult = await txn.query(
+        'party',
+        where: 'P_id = ? AND Len_id IS NULL',
+        whereArgs: [partyId],
       );
+
+      if (partyResult.isNotEmpty) {
+        // Insert into Lending table
+        await txn.insert(
+          'Lending',
+          {
+            'Len_id': lendingId,
+            'Line_id': lineId,
+            'P_id': partyId,
+            'Type': type,
+            'Amt_lent': amountLent,
+            'Total_Payable_amt': totalAmountPayable,
+            'Profit': profit, // Include profit here
+            'Due_length': dueLength,
+            'Date_of_lent': dateOfLent,
+            'Due_date': dueDate,
+            'status': 'active', // Set status to active
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+
+        // Update the party's Len_id
+        await txn.update(
+          'party',
+          {'Len_id': lendingId},
+          where: 'P_id = ?',
+          whereArgs: [partyId],
+        );
+      } else {
+        throw Exception('Party already has an active lending.');
+      }
 
       // Insert the corresponding entry into the LentAmt table
       await txn.insert(
