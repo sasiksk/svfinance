@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
 
-import 'package:svfinance/Screens/NewHomeScreen.dart'; // Import your DatabaseHelper class
+import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart'; // Import your DatabaseHelper class
 
 void main() async {
   WidgetsFlutterBinding

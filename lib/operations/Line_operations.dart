@@ -28,6 +28,22 @@ class LineOperations {
     }
   }
 
+  static Future<String?> getLineIdByName(String lineName) async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'Line',
+      columns: ['Line_id'],
+      where: 'Line_Name = ?',
+      whereArgs: [lineName],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first['Line_id'] as String?;
+    } else {
+      return null;
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> getAllLines() async {
     final db = await DatabaseHelper.getDatabase();
     return db.query('Line');
@@ -51,5 +67,41 @@ class LineOperations {
         'totalLines': 0,
       };
     }
+  }
+
+  static Future<Map<String, dynamic>?> getInvestmentDetailsByLineId(
+      String lineId) async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'InvestmentTotal',
+      columns: [
+        'Inv_Total',
+        'Inv_Remaing',
+        'Lentamt',
+        'Returnamt',
+        'profit',
+        'expense',
+        'totallineamt'
+      ],
+      where: 'Line_id = ?',
+      whereArgs: [lineId],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getPartyNamesByLineId(
+      String lineId) async {
+    final db = await DatabaseHelper.getDatabase();
+    return db.query(
+      'party',
+      columns: ['P_Name'],
+      where: 'Line_id = ?',
+      whereArgs: [lineId],
+    );
   }
 }
