@@ -65,7 +65,7 @@ class CollectionOperations {
         final List<Map<String, dynamic>> investmentTotalResult =
             await txn.query(
           'InvestmentTotal',
-          columns: ['Returnamt', 'totallineamt'],
+          columns: ['Returnamt', 'totallineamt', 'Inv_Remaing'],
           where: 'Line_id = ?',
           whereArgs: [lineId],
         );
@@ -76,8 +76,9 @@ class CollectionOperations {
                 (investmentTotalResult.first['Returnamt']) as double;
             final double totallineamt =
                 (investmentTotalResult.first['totallineamt']) as double;
-            final double invRemaing = (investmentTotalResult
-                .first['Inv_Remaing']) as double; // Fetch Inv_Remaing
+
+            final double invRemaing =
+                (investmentTotalResult.first['Inv_Remaing']) as double;
 
             // Update returnamt and totallineamt
             final double newReturnamt = returnamt + amountCollected;
@@ -91,10 +92,10 @@ class CollectionOperations {
             print('Inv_Remaing: $newInvRemaing');
 
             await txn.rawUpdate('''
-      UPDATE InvestmentTotal
-      SET Returnamt = ?,
-          totallineamt = ?,
-          Inv_Remaing = ? 
+               UPDATE InvestmentTotal
+                SET Returnamt = ?,
+                   totallineamt = ?,
+                  Inv_Remaing = ? 
       WHERE Line_id = ?
     ''', [newReturnamt, newTotallineamt, newInvRemaing, lineId]);
           }

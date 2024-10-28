@@ -52,7 +52,7 @@ class InvestmentOperations {
               'Returnamt': 0, // Set Returnamt to 0
               'profit': 0,
               'expense': 0, // Set expense to 0
-              'totallineamt': amountInvested,
+              'totallineamt': 0,
             },
             conflictAlgorithm: ConflictAlgorithm.replace,
           );

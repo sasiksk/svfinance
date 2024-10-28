@@ -24,7 +24,7 @@ class _NewhomescreenState extends State<Newhomescreen>
   }
 
   Future<void> _initialize() async {
-    await _updateDaysRemaining();
+    // await _updateDaysRemaining();
     await _initializeDatabase();
   }
 
