@@ -104,4 +104,20 @@ class LineOperations {
       whereArgs: [lineId],
     );
   }
+
+  static Future<String?> getPartyIdByName(String partyName) async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'party',
+      columns: ['P_id'],
+      where: 'P_Name = ?',
+      whereArgs: [partyName],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first['P_id'] as String?;
+    } else {
+      return null;
+    }
+  }
 }

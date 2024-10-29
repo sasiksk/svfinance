@@ -54,7 +54,7 @@ class LendingOperations {
       final double newLentamt = currentLentamt + amountLent;
       final double profit = totalAmountPayable - amountLent;
       final double newProfit = currentProfit + profit;
-      final double newTotallineamt = newInvRemaining + newLentamt + newProfit;
+      final double newTotallineamt = currentTotallineamt + totalAmountPayable;
 
       // Update the remaining investment amount and other values
       await txn.update(

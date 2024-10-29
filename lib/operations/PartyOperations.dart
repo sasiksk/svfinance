@@ -87,6 +87,21 @@ class PartyOperations {
     }
   }
 
+  static Future<Map<String, dynamic>?> getPartyByIdAlone(String partyId) async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'party',
+      where: 'P_id = ?',
+      whereArgs: [partyId],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> getAllParties() async {
     final db = await DatabaseHelper.getDatabase();
     return await db.query('party');
@@ -99,6 +114,48 @@ class PartyOperations {
       'party',
       where: 'Line_id = ?',
       whereArgs: [lineId],
+    );
+  }
+
+  static Future<String?> getLenIdByPartyId(String partyId) async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'party',
+      columns: ['Len_id'],
+      where: 'P_id = ?',
+      whereArgs: [partyId],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first['Len_id'] as String?;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> getLentAmtDetailsByLenId(
+      String lenId) async {
+    final db = await DatabaseHelper.getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      'LentAmt',
+      where: 'Len_id = ?',
+      whereArgs: [lenId],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getCollectionDetailsByLenId(
+      String lenId) async {
+    final db = await DatabaseHelper.getDatabase();
+    return db.query(
+      'Collection',
+      where: 'Len_id = ?',
+      whereArgs: [lenId],
     );
   }
 }
