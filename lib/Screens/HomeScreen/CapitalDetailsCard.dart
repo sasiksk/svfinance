@@ -79,7 +79,7 @@ class CapitalDetailsCard extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '\$${totalAmtInvested.toStringAsFixed(2)}',
+                                '₹${totalAmtInvested.toStringAsFixed(2)}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -100,7 +100,7 @@ class CapitalDetailsCard extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '\$${amtRemaining.toStringAsFixed(2)}',
+                                '₹${amtRemaining.toStringAsFixed(2)}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,

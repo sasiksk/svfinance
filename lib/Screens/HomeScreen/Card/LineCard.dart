@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/HomeScreen/Line/LineHomeScreens.dart';
 
-import 'package:svfinance/Screens/LineDetailScreen.dart';
-
 class LineCard extends StatelessWidget {
   final String lineName;
   final double screenWidth;

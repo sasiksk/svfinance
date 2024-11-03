@@ -14,11 +14,12 @@ class CapitalScreen extends StatefulWidget {
 
 class _CapitalScreenState extends State<CapitalScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _capitalIdController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _amountInvestedController =
       TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+
+  String _capitalId = '';
 
   @override
   void initState() {
@@ -26,18 +27,18 @@ class _CapitalScreenState extends State<CapitalScreen> {
 
     // Set default or existing values if editing an entry
     if (widget.entry != null) {
-      _capitalIdController.text = widget.entry!['Capital_id'];
+      _capitalId = widget.entry!['Capital_id'];
       _dateController.text = widget.entry!['Date_of_Particulars'];
       _amountInvestedController.text = widget.entry!['Amt_Inv'].toString();
       _noteController.text = widget.entry!['Note'];
     } else {
+      _capitalId = DateTime.now().millisecondsSinceEpoch.toString();
       _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     }
   }
 
   @override
   void dispose() {
-    _capitalIdController.dispose();
     _dateController.dispose();
     _amountInvestedController.dispose();
     _noteController.dispose();
@@ -60,19 +61,15 @@ class _CapitalScreenState extends State<CapitalScreen> {
 
   void _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final capitalId = _capitalIdController.text.isEmpty
-          ? DateTime.now().millisecondsSinceEpoch.toString()
-          : _capitalIdController.text;
-
       final success = widget.entry == null
           ? await CapitalOperations.insertCapital(
-              capitalId: capitalId,
+              capitalId: _capitalId,
               dateOfParticulars: _dateController.text,
               amountInvested: double.parse(_amountInvestedController.text),
               note: _noteController.text,
             )
           : await CapitalOperations.updateCapital(
-              capitalId: capitalId,
+              capitalId: _capitalId,
               dateOfParticulars: _dateController.text,
               amountInvested: double.parse(_amountInvestedController.text),
               note: _noteController.text,
@@ -97,7 +94,7 @@ class _CapitalScreenState extends State<CapitalScreen> {
 
   void _resetForm() {
     _formKey.currentState?.reset();
-    _capitalIdController.clear();
+    _capitalId = DateTime.now().millisecondsSinceEpoch.toString();
     _dateController.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
     _amountInvestedController.clear();
     _noteController.clear();
@@ -123,18 +120,6 @@ class _CapitalScreenState extends State<CapitalScreen> {
             child: Column(
               children: [
                 CustomTextField(
-                  controller: _capitalIdController,
-                  labelText: 'Capital ID',
-                  readOnly: widget.entry != null, // Read-only in edit mode
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter Capital ID';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.0),
-                CustomTextField(
                   controller: _dateController,
                   labelText: 'Date of Particulars',
                   readOnly: true,
@@ -155,44 +140,30 @@ class _CapitalScreenState extends State<CapitalScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Amount Invested';
                     }
-                    final number = num.tryParse(value);
-                    if (number == null) {
-                      return 'Please enter a valid number';
-                    }
                     return null;
                   },
                 ),
                 SizedBox(height: 16.0),
                 CustomTextField(
                   controller: _noteController,
-                  labelText: 'Particulars',
+                  labelText: 'Note',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter Particulars';
+                      return 'Please enter a Note';
                     }
                     return null;
                   },
                 ),
                 SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _submitForm,
-                      child: Text('Submit'),
-                    ),
-                    ElevatedButton(
-                      onPressed: _resetForm,
-                      child: Text('Reset'),
-                    ),
-                  ],
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: Text(
+                      widget.entry == null ? 'Add Capital' : 'Update Capital'),
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Back'),
+                  onPressed: _resetForm,
+                  child: Text('Reset'),
                 ),
               ],
             ),

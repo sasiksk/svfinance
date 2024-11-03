@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:svfinance/Screens/Captial/CaptialScreenHome.dart';
+import 'package:svfinance/Screens/DatabaseHelper.dart';
+import 'package:svfinance/Screens/HomeScreen/BottomNavItem.dart';
 import 'package:svfinance/Screens/HomeScreen/CapitalDetailsCard.dart';
-
-import 'package:svfinance/Screens/Captial/CaptitalScreen2.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:svfinance/Screens/HomeScreen/Card/LineCard.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/Line/LineScreen.dart';
@@ -15,10 +17,45 @@ class Newhomescreen extends StatefulWidget {
 class _NewhomescreenState extends State<Newhomescreen> {
   String selectedLineName = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _initializeDatabase();
+    _updateDaysRemaining();
+  }
+
   void handleLineSelected(String lineName) {
     setState(() {
       selectedLineName = lineName;
     });
+  }
+
+  void navigateTo(BuildContext context, Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
+
+  Future<void> _updateDaysRemaining() async {
+    try {
+      print("Updating days remaining...");
+      await DatabaseHelper.updateDaysRemaining();
+      print("Days remaining updated successfully.");
+    } catch (e) {
+      print("Error updating days remaining: $e");
+    }
+  }
+
+  Future<void> _initializeDatabase() async {
+    try {
+      print("Initializing database...");
+      await DatabaseHelper.getDatabase();
+      //await DatabaseHelper.dropDatabase('finance.db');
+      print("Database initialized successfully.");
+    } catch (e) {
+      print("Error initializing database: $e");
+    }
   }
 
   @override
@@ -28,7 +65,7 @@ class _NewhomescreenState extends State<Newhomescreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Finance',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -47,8 +84,8 @@ class _NewhomescreenState extends State<Newhomescreen> {
             children: [
               CapitalDetailsCard(
                   screenHeight: screenHeight, screenWidth: screenWidth),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Line List',
                 style: TextStyle(
                   fontSize: 20,
@@ -60,11 +97,11 @@ class _NewhomescreenState extends State<Newhomescreen> {
                 future: LineOperations.getAllLines(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text(
                       'Error: ${snapshot.error}',
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     );
                   } else if (snapshot.hasData) {
                     final lines = snapshot.data!;
@@ -78,7 +115,7 @@ class _NewhomescreenState extends State<Newhomescreen> {
                       }).toList(),
                     );
                   } else {
-                    return Text(
+                    return const Text(
                       'No lines available',
                       style: TextStyle(color: Colors.white),
                     );
@@ -89,54 +126,42 @@ class _NewhomescreenState extends State<Newhomescreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 40, 65, 2),
-        shape: CircularNotchedRectangle(),
+      bottomNavigationBar: SafeArea(
+          child: BottomAppBar(
+        color: const Color.fromARGB(255, 40, 65, 2),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 6.0,
+        height: screenWidth * 0.23,
         child: Container(
           height: 70,
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.home, color: Colors.white),
-                    onPressed: () {},
-                  ),
-                ],
+              BottomNavItem(
+                icon: FontAwesomeIcons.home,
+                label: 'Home',
+                destinationScreen: Newhomescreen(),
               ),
-              IconButton(
-                icon: Icon(Icons.account_balance, color: Colors.white),
-                onPressed: () {
-                  navigateTo(context, CapitalScreen());
-                },
+              BottomNavItem(
+                icon: FontAwesomeIcons.coins,
+                label: 'Capital',
+                destinationScreen: CapitalScreenHome(),
               ),
-              IconButton(
-                icon: Icon(Icons.line_axis, color: Colors.white),
-                onPressed: () {
-                  navigateTo(context, LineScreen());
-                },
+              BottomNavItem(
+                icon: FontAwesomeIcons.chartLine,
+                label: 'Line',
+                destinationScreen: LineScreen(),
               ),
-              IconButton(
-                icon: Icon(Icons.print, color: Colors.white),
-                onPressed: () {
-                  navigateTo(context, Homescreen());
-                },
+              BottomNavItem(
+                icon: FontAwesomeIcons.print,
+                label: 'Report',
+                destinationScreen: Homescreen(),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void navigateTo(BuildContext context, Widget screen) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => screen),
+      )),
     );
   }
 }

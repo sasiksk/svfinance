@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:svfinance/CustomTextField.dart';
+import 'package:svfinance/Screens/HomeScreen/BottomNavItem.dart';
+import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
+import 'package:svfinance/Screens/Homescreeen.dart';
 
 import 'package:svfinance/operations/Line_operations.dart';
 
@@ -127,6 +131,32 @@ class _LineScreenState extends State<LineScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: SafeArea(
+          child: BottomAppBar(
+        color: const Color.fromARGB(255, 40, 65, 2),
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 6.0,
+        height: MediaQuery.of(context).size.width * 0.23,
+        child: Container(
+          height: 70,
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              BottomNavItem(
+                icon: FontAwesomeIcons.home,
+                label: 'Home',
+                destinationScreen: Newhomescreen(),
+              ),
+              BottomNavItem(
+                icon: FontAwesomeIcons.print,
+                label: 'Report',
+                destinationScreen: Homescreen(),
+              ),
+            ],
+          ),
+        ),
+      )),
     );
   }
 }
