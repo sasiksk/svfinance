@@ -4,13 +4,15 @@ import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/Line/LineScreen.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
+  const CustomBottomNavigationBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Color.fromARGB(255, 40, 65, 2),
-      shape: CircularNotchedRectangle(),
+      color: const Color.fromARGB(255, 40, 65, 2),
+      shape: const CircularNotchedRectangle(),
       notchMargin: 6.0,
-      child: Container(
+      child: SizedBox(
         height: 70,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -20,13 +22,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.home, color: Colors.white),
+                  icon: const Icon(Icons.home, color: Colors.white),
                   onPressed: () {},
                 ),
               ],
             ),
             IconButton(
-              icon: Icon(Icons.account_balance, color: Colors.white),
+              icon: const Icon(Icons.account_balance, color: Colors.white),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -35,7 +37,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: Icon(Icons.line_axis, color: Colors.white),
+              icon: const Icon(Icons.line_axis, color: Colors.white),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -44,7 +46,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: Icon(Icons.print, color: Colors.white),
+              icon: const Icon(Icons.print, color: Colors.white),
               onPressed: () {
                 Navigator.push(
                   context,

@@ -17,16 +17,16 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF284102), // Dark green color
         hintColor: const Color(0xFFB2DFDB), // Light green for accents
         scaffoldBackgroundColor: const Color(0xFFF3F4F6), // Light background
-        appBarTheme: AppBarTheme(
-          color: const Color(0xFF284102), // AppBar color matching primary color
+        appBarTheme: const AppBarTheme(
+          color: Color.fromARGB(
+              255, 84, 92, 71), // AppBar color matching primary color
           elevation: 0,
-          titleTextStyle: const TextStyle(
+          titleTextStyle: TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          iconTheme:
-              const IconThemeData(color: Colors.white), // Icon color in AppBar
+          iconTheme: IconThemeData(color: Colors.white), // Icon color in AppBar
         ),
         textTheme: const TextTheme(
           displayLarge: TextStyle(
@@ -35,14 +35,14 @@ class MyApp extends StatelessWidget {
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           bodyMedium: TextStyle(fontSize: 16, color: Colors.black87),
         ),
-        buttonTheme: ButtonThemeData(
-          buttonColor: const Color(0xFF284102), // Button color matching primary
+        buttonTheme: const ButtonThemeData(
+          buttonColor: Color(0xFF284102), // Button color matching primary
           textTheme: ButtonTextTheme.primary,
         ),
         iconTheme:
             const IconThemeData(color: Color(0xFF284102)), // General icon color
       ),
-      home: Newhomescreen(),
+      home: const Newhomescreen(),
     );
   }
 }

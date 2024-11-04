@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:svfinance/Screens/Captial/CaptitalScreen2.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
-import 'package:svfinance/Screens/HomeScreen/BottomNavItem.dart';
+
 import 'package:svfinance/Screens/HomeScreen/Card/EmptyDeatilCard.dart';
 import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
-import 'package:svfinance/Screens/Line/LineScreen.dart';
+
 import 'package:svfinance/operations/CaptialOperations.dart';
+
+import '../HomeScreen/CustomBottomNavigationBar2.dart';
 
 class CapitalScreenHome extends StatefulWidget {
   @override
@@ -37,19 +39,6 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
     });
   }
 
-  void _navigateToAddScreen() {
-    Navigator.of(context)
-        .push(
-      MaterialPageRoute(
-        builder: (context) => CapitalScreen(),
-      ),
-    )
-        .then((_) {
-      loadCapitalEntries(); // Refresh the list after adding new entry
-      loadTotalAmounts(); // Refresh the total amounts after adding new entry
-    });
-  }
-
   void _navigateToUpdateScreen(Map<String, dynamic> entry) {
     Navigator.of(context)
         .push(
@@ -66,13 +55,10 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final cardHeight = mediaQuery.size.height * 0.15;
-    final cardWidth = mediaQuery.size.width * 0.9;
-    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Capital Screen'),
+        title: const Text('Capital Screen'),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
@@ -83,11 +69,11 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
               future: totalAmounts,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData) {
-                  return Center(child: Text('No data available'));
+                  return const Center(child: Text('No data available'));
                 } else {
                   final totalData = snapshot.data!;
                   return EmptyCard(
@@ -104,7 +90,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Invested:',
                                   style: TextStyle(
                                     color: Colors.green,
@@ -114,7 +100,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                 ),
                                 Text(
                                   '${totalData['cTotal_Amt_Inv']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.green,
                                     fontSize: 16,
                                   ),
@@ -124,7 +110,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Remaining:',
                                   style: TextStyle(
                                     color: Colors.red,
@@ -134,7 +120,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                 ),
                                 Text(
                                   '${totalData['cTotal_Amt_Rem']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.red,
                                     fontSize: 16,
                                   ),
@@ -149,17 +135,17 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                 }
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
                 future: capitalEntries,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No entries available'));
+                    return const Center(child: Text('No entries available'));
                   } else {
                     final data = snapshot.data!;
                     return ListView.builder(
@@ -172,7 +158,7 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
                                 Text('Date: ${entry['Date_of_Particulars']}'),
                             subtitle: Text('Amt Invested: ${entry['Amt_Inv']}'),
                             trailing: IconButton(
-                              icon: Icon(Icons.edit),
+                              icon: const Icon(Icons.edit),
                               onPressed: () => _navigateToUpdateScreen(entry),
                             ),
                           ),
@@ -187,36 +173,24 @@ class _CapitalScreenHomeState extends State<CapitalScreenHome> {
         ),
       ),
       bottomNavigationBar: SafeArea(
-          child: BottomAppBar(
-        color: const Color.fromARGB(255, 40, 65, 2),
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6.0,
-        height: screenWidth * 0.23,
-        child: Container(
-          height: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              BottomNavItem(
-                icon: FontAwesomeIcons.home,
-                label: 'Home',
-                destinationScreen: Newhomescreen(),
-              ),
-              BottomNavItem(
-                icon: FontAwesomeIcons.coins,
-                label: 'Add Capital Investment',
-                destinationScreen: CapitalScreen(),
-              ),
-              BottomNavItem(
-                icon: FontAwesomeIcons.print,
-                label: 'Report',
-                destinationScreen: Homescreen(),
-              ),
-            ],
-          ),
+        child: CustomBottomNavigationBar2(
+          icons: const [
+            FontAwesomeIcons.home,
+            FontAwesomeIcons.coins,
+            FontAwesomeIcons.print,
+          ],
+          labels: const [
+            'Home',
+            'Add Capital Investment',
+            'Report',
+          ],
+          screens: [
+            const Newhomescreen(),
+            CapitalScreen(),
+            Homescreen(),
+          ],
         ),
-      )),
+      ),
     );
   }
 }

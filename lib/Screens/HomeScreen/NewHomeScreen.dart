@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/Captial/CaptialScreenHome.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
-import 'package:svfinance/Screens/HomeScreen/BottomNavItem.dart';
 import 'package:svfinance/Screens/HomeScreen/CapitalDetailsCard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:svfinance/Screens/HomeScreen/Card/LineCard.dart';
+import 'package:svfinance/Screens/HomeScreen/CustomAppBar.dart';
+import 'package:svfinance/Screens/HomeScreen/CustomBottomNavigationBar2.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/Line/LineScreen.dart';
 import 'package:svfinance/operations/Line_operations.dart';
 
 class Newhomescreen extends StatefulWidget {
+  const Newhomescreen({super.key});
+
   @override
   State<Newhomescreen> createState() => _NewhomescreenState();
 }
@@ -39,22 +42,22 @@ class _NewhomescreenState extends State<Newhomescreen> {
 
   Future<void> _updateDaysRemaining() async {
     try {
-      print("Updating days remaining...");
+      // print("Updating days remaining...");
       await DatabaseHelper.updateDaysRemaining();
-      print("Days remaining updated successfully.");
+      //print("Days remaining updated successfully.");
     } catch (e) {
-      print("Error updating days remaining: $e");
+      //print("Error updating days remaining: $e");
     }
   }
 
   Future<void> _initializeDatabase() async {
     try {
-      print("Initializing database...");
+      // print("Initializing database...");
       await DatabaseHelper.getDatabase();
       //await DatabaseHelper.dropDatabase('finance.db');
-      print("Database initialized successfully.");
+      // print("Database initialized successfully.");
     } catch (e) {
-      print("Error initializing database: $e");
+      //  print("Error initializing database: $e");
     }
   }
 
@@ -64,18 +67,17 @@ class _NewhomescreenState extends State<Newhomescreen> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Finance',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
+      appBar: CustomAppBar(
+        title: 'Home',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
             color: Colors.white,
+            onPressed: () {
+              _updateDaysRemaining();
+            },
           ),
-        ),
-        backgroundColor: Color.fromARGB(255, 2, 128, 18),
-        elevation: 20.0,
-        centerTitle: true,
+        ],
       ),
       body: Align(
         alignment: Alignment.topCenter,
@@ -127,41 +129,27 @@ class _NewhomescreenState extends State<Newhomescreen> {
         ),
       ),
       bottomNavigationBar: SafeArea(
-          child: BottomAppBar(
-        color: const Color.fromARGB(255, 40, 65, 2),
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6.0,
-        height: screenWidth * 0.23,
-        child: Container(
-          height: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              BottomNavItem(
-                icon: FontAwesomeIcons.home,
-                label: 'Home',
-                destinationScreen: Newhomescreen(),
-              ),
-              BottomNavItem(
-                icon: FontAwesomeIcons.coins,
-                label: 'Capital',
-                destinationScreen: CapitalScreenHome(),
-              ),
-              BottomNavItem(
-                icon: FontAwesomeIcons.chartLine,
-                label: 'Line',
-                destinationScreen: LineScreen(),
-              ),
-              BottomNavItem(
-                icon: FontAwesomeIcons.print,
-                label: 'Report',
-                destinationScreen: Homescreen(),
-              ),
-            ],
-          ),
+        child: CustomBottomNavigationBar2(
+          icons: const [
+            FontAwesomeIcons.home,
+            FontAwesomeIcons.coins,
+            FontAwesomeIcons.chartLine,
+            FontAwesomeIcons.print,
+          ],
+          labels: const [
+            'Home',
+            'Add Capital',
+            'Add Line',
+            'Report',
+          ],
+          screens: [
+            const Newhomescreen(),
+            CapitalScreenHome(),
+            LineScreen(),
+            Homescreen(),
+          ],
         ),
-      )),
+      ),
     );
   }
 }

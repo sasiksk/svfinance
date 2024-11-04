@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/CollectionScreen.dart';
-import 'package:svfinance/Screens/HomeScreen/Card/CustomAppBar.dart';
+
 import 'package:svfinance/Screens/HomeScreen/Card/EmptyDeatilCard.dart';
-import 'package:svfinance/Screens/HomeScreen/Card/LineCard.dart';
+import 'package:svfinance/Screens/HomeScreen/CustomAppBar.dart';
 import 'package:svfinance/Screens/HomeScreen/Line/CollectionCard.dart';
 import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
 import 'package:svfinance/Screens/LendingBasicDetailsScreen.dart';
@@ -62,6 +62,7 @@ class _PartyHomeScreenState extends State<PartyDetailScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: partyDetails != null ? partyDetails!['P_Name'] : 'Loading...',
+        actions: [],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
