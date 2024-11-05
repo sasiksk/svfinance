@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:svfinance/Screens/HomeScreen/Card/EmptyDeatilCard.dart';
-import 'package:svfinance/Screens/HomeScreen/Card/LineCard.dart';
-import 'package:svfinance/Screens/HomeScreen/CustomAppBar.dart';
-import 'package:svfinance/Screens/HomeScreen/CustomBottomNavigationBar2.dart';
+import 'package:svfinance/AppBars/Utilites/EmptyDeatilCard.dart';
+import 'package:svfinance/AppBars/Utilites/LineCard.dart';
+import 'package:svfinance/AppBars/CustomAppBar.dart';
+import 'package:svfinance/AppBars/CustomBottomNavigationBar2.dart';
 import 'package:svfinance/Screens/HomeScreen/Line/PartyHomeScreen.dart';
-import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
+import 'package:svfinance/MainScreens/NewHomeScreen.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/Investment/Investment_Screen.dart';
 import 'package:svfinance/Screens/Party/PartyScreen.dart';
-import 'package:svfinance/operations/Line_operations.dart';
+import 'package:svfinance/MainScreens/Line/Line_operations.dart';
 
 class LineHomeScreen2 extends StatefulWidget {
   final String lineName;
@@ -79,12 +79,13 @@ class _LineHomeScreen2State extends State<LineHomeScreen2> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.blueGrey.shade100,
       appBar: CustomAppBar(
-        title: widget.lineName,
+        title: 'Finance Manager',
         actions: [],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(4.0),
         child: Column(
           children: [
             if (isLoading)
@@ -96,7 +97,7 @@ class _LineHomeScreen2State extends State<LineHomeScreen2> {
               EmptyCard(
                 screenHeight: screenHeight,
                 screenWidth: screenWidth,
-                title: 'Line-Id : $lineId',
+                title: 'Line :${widget.lineName}',
                 content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -129,13 +130,13 @@ class _LineHomeScreen2State extends State<LineHomeScreen2> {
                   ],
                 ),
               ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             const Text(
               'Party List',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 174, 204, 4),
+                color: Color.fromARGB(255, 12, 14, 0),
               ),
             ),
             Expanded(

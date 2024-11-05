@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/Screens/Captial/CaptitalScreen2.dart';
+import 'package:svfinance/MainScreens/Captial/AddCaptial.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/Line/LineScreen.dart';
 

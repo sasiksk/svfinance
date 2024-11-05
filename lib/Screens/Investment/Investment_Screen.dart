@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:svfinance/CustomTextField.dart';
 import 'package:svfinance/operations/Investmentoperations.dart';
-import 'package:svfinance/operations/Line_operations.dart';
+import 'package:svfinance/MainScreens/Line/Line_operations.dart';
 
 class InvestmentScreen extends StatefulWidget {
   @override

@@ -16,7 +16,7 @@ class EmptyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 20.0),
+      margin: const EdgeInsets.only(top: 10),
       height:
           screenHeight * 0.26, // Slightly increased height to avoid overflow
       width: screenWidth - 40, // Full width minus padding (20 on each side)
@@ -30,8 +30,8 @@ class EmptyCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             gradient: LinearGradient(
               colors: [
-                Colors.blueGrey.shade700,
-                Colors.black87
+                Colors.teal.shade400,
+                Colors.teal.shade900,
               ], // Gradient background
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,

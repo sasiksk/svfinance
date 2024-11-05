@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:svfinance/CustomTextField.dart';
 import 'package:svfinance/Screens/HomeScreen/BottomNavItem.dart';
-import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
+import 'package:svfinance/MainScreens/NewHomeScreen.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 
-import 'package:svfinance/operations/Line_operations.dart';
+import 'package:svfinance/MainScreens/Line/Line_operations.dart';
 
 class LineScreen extends StatefulWidget {
   final Map<String, dynamic>? entry; // Add this line

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
-import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
+import 'package:svfinance/MainScreens/NewHomeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

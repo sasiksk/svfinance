@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/Screens/Captial/CaptialScreenHome.dart';
+import 'package:svfinance/MainScreens/Captial/CaptialScreenHome.dart';
 import 'package:svfinance/Screens/CollectionScreen.dart';
 import 'package:svfinance/Screens/DailyReportScreen.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';

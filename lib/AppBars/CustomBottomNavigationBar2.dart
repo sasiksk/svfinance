@@ -19,7 +19,7 @@ class CustomBottomNavigationBar2 extends StatelessWidget {
 
     return BottomAppBar(
       height: screenHeight * 0.11, // Set height based on screen height
-      color: const Color.fromARGB(255, 40, 65, 2),
+      color: Colors.teal.shade900,
       shape: const CircularNotchedRectangle(),
       notchMargin: 6.0,
       child: SizedBox(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:svfinance/Screens/Captial/CaptitalScreen2.dart';
+import 'package:svfinance/MainScreens/Captial/AddCaptial.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
 
-import 'package:svfinance/Screens/HomeScreen/Card/EmptyDeatilCard.dart';
-import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
+import 'package:svfinance/AppBars/Utilites/EmptyDeatilCard.dart';
+import 'package:svfinance/MainScreens/NewHomeScreen.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 
-import 'package:svfinance/operations/CaptialOperations.dart';
+import 'package:svfinance/MainScreens/Captial/CaptialOperations.dart';
 
-import '../HomeScreen/CustomBottomNavigationBar2.dart';
+import '../../AppBars/CustomBottomNavigationBar2.dart';
 
 class CapitalScreenHome extends StatefulWidget {
   @override

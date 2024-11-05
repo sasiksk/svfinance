@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/Screens/Captial/CaptialScreenHome.dart';
+import 'package:svfinance/MainScreens/Captial/CaptialScreenHome.dart';
 import 'package:svfinance/Screens/DatabaseHelper.dart';
-import 'package:svfinance/Screens/HomeScreen/CapitalDetailsCard.dart';
+import 'package:svfinance/MainScreens/Captial/CapitalDetailsCard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:svfinance/Screens/HomeScreen/Card/LineCard.dart';
-import 'package:svfinance/Screens/HomeScreen/CustomAppBar.dart';
-import 'package:svfinance/Screens/HomeScreen/CustomBottomNavigationBar2.dart';
+import 'package:svfinance/AppBars/Utilites/LineCard.dart';
+import 'package:svfinance/AppBars/CustomAppBar.dart';
+import 'package:svfinance/AppBars/CustomBottomNavigationBar2.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/Line/LineScreen.dart';
-import 'package:svfinance/operations/Line_operations.dart';
+import 'package:svfinance/MainScreens/Line/Line_operations.dart';
 
 class Newhomescreen extends StatefulWidget {
   const Newhomescreen({super.key});

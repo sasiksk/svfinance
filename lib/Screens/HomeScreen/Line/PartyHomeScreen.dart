@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/CollectionScreen.dart';
 
-import 'package:svfinance/Screens/HomeScreen/Card/EmptyDeatilCard.dart';
-import 'package:svfinance/Screens/HomeScreen/CustomAppBar.dart';
-import 'package:svfinance/Screens/HomeScreen/CustomBottomNavigationBar2.dart';
+import 'package:svfinance/AppBars/Utilites/EmptyDeatilCard.dart';
+import 'package:svfinance/AppBars/CustomAppBar.dart';
+import 'package:svfinance/AppBars/CustomBottomNavigationBar2.dart';
 import 'package:svfinance/Screens/HomeScreen/Line/CollectionCard.dart';
-import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
+import 'package:svfinance/MainScreens/NewHomeScreen.dart';
 import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/LendingBasicDetailsScreen.dart';
 

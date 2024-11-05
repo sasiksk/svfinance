@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/LendingBasicDetailsScreen.dart';
 import 'package:svfinance/operations/LendingOperations.dart';
-import 'package:svfinance/operations/Line_operations.dart';
+import 'package:svfinance/MainScreens/Line/Line_operations.dart';
 
 class LendingHomeScreen extends StatefulWidget {
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:svfinance/CustomTextField.dart';
-import 'package:svfinance/operations/CaptialOperations.dart';
+import 'package:svfinance/MainScreens/Captial/CaptialOperations.dart';
 
 class CapitalScreen extends StatefulWidget {
   final Map<String, dynamic>? entry; // Optional for edit functionality

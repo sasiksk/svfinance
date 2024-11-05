@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/Screens/HomeScreen/Line/LineHomeScreens.dart';
+import 'package:svfinance/MainScreens/Line/LineHomeScreens.dart';
 
 class LineCard extends StatelessWidget {
   final String lineName;
@@ -38,8 +38,8 @@ class LineCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               gradient: LinearGradient(
                 colors: [
-                  Colors.blueGrey.shade700,
-                  Colors.black87
+                  Colors.teal.shade400,
+                  Colors.teal.shade900,
                 ], // Gradient background
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

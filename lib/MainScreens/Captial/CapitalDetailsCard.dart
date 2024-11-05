@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:svfinance/operations/CaptialOperations.dart';
+import 'package:svfinance/MainScreens/Captial/CaptialOperations.dart';
 
 class CapitalDetailsCard extends StatelessWidget {
   final double screenHeight;
@@ -10,7 +10,7 @@ class CapitalDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 20.0),
+      margin: const EdgeInsets.only(top: 10),
       height: screenHeight * 0.2, // Slightly increased height to avoid overflow
       width: screenWidth - 40, // Full width minus padding (20 on each side)
       child: Card(
@@ -23,8 +23,8 @@ class CapitalDetailsCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             gradient: LinearGradient(
               colors: [
-                Colors.blueGrey.shade700,
-                Colors.black87
+                Colors.teal.shade400,
+                Colors.teal.shade900,
               ], // Gradient background
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -36,7 +36,7 @@ class CapitalDetailsCard extends StatelessWidget {
               crossAxisAlignment:
                   CrossAxisAlignment.start, // Align content to start
               children: <Widget>[
-                Text(
+                const Text(
                   'Capital Details',
                   style: TextStyle(
                     fontSize: 22,
@@ -44,12 +44,13 @@ class CapitalDetailsCard extends StatelessWidget {
                     color: Colors.white, // White text color
                   ),
                 ),
-                SizedBox(height: 15), // Increased spacing for better layout
+                const SizedBox(
+                    height: 15), // Increased spacing for better layout
                 FutureBuilder<Map<String, dynamic>>(
                   future: CapitalOperations.getCapitalTotals(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation<Color>(Colors.white),
@@ -58,7 +59,7 @@ class CapitalDetailsCard extends StatelessWidget {
                     } else if (snapshot.hasError) {
                       return Text(
                         'Error: ${snapshot.error}',
-                        style: TextStyle(color: Colors.redAccent),
+                        style: const TextStyle(color: Colors.redAccent),
                       );
                     } else if (snapshot.hasData) {
                       final data = snapshot.data!;
@@ -70,7 +71,7 @@ class CapitalDetailsCard extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Total Invested:',
                                 style: TextStyle(
                                   fontSize: 18,
@@ -80,7 +81,7 @@ class CapitalDetailsCard extends StatelessWidget {
                               ),
                               Text(
                                 '₹${totalAmtInvested.toStringAsFixed(2)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
@@ -91,7 +92,7 @@ class CapitalDetailsCard extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(
+                              const Text(
                                 'Remaining:',
                                 style: TextStyle(
                                   fontSize: 18,
@@ -101,7 +102,7 @@ class CapitalDetailsCard extends StatelessWidget {
                               ),
                               Text(
                                 '₹${amtRemaining.toStringAsFixed(2)}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
@@ -112,7 +113,7 @@ class CapitalDetailsCard extends StatelessWidget {
                         ],
                       );
                     } else {
-                      return Text(
+                      return const Text(
                         'No data available',
                         style: TextStyle(color: Colors.white70),
                       );

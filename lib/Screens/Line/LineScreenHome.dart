@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svfinance/Screens/Line/LineScreen.dart';
-import 'package:svfinance/operations/Line_operations.dart'; // Ensure this import is correct
+import 'package:svfinance/MainScreens/Line/Line_operations.dart'; // Ensure this import is correct
 
 class LineScreenHome extends StatefulWidget {
   @override
