@@ -51,7 +51,7 @@ class LineCard extends StatelessWidget {
               child: Text(
                 lineName,
                 textAlign: TextAlign.start,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white, // White text color

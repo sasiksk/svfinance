@@ -3,8 +3,10 @@ import 'package:svfinance/Screens/CollectionScreen.dart';
 
 import 'package:svfinance/Screens/HomeScreen/Card/EmptyDeatilCard.dart';
 import 'package:svfinance/Screens/HomeScreen/CustomAppBar.dart';
+import 'package:svfinance/Screens/HomeScreen/CustomBottomNavigationBar2.dart';
 import 'package:svfinance/Screens/HomeScreen/Line/CollectionCard.dart';
 import 'package:svfinance/Screens/HomeScreen/NewHomeScreen.dart';
+import 'package:svfinance/Screens/Homescreeen.dart';
 import 'package:svfinance/Screens/LendingBasicDetailsScreen.dart';
 
 import 'package:svfinance/operations/PartyOperations.dart';
@@ -89,7 +91,7 @@ class _PartyHomeScreenState extends State<PartyDetailScreen> {
                             style: TextStyle(color: Colors.white)),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -103,13 +105,13 @@ class _PartyHomeScreenState extends State<PartyDetailScreen> {
                   ],
                 ),
               ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Collection Details',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 174, 204, 4),
+                color: Color.fromARGB(255, 19, 22, 1),
               ),
             ),
             Expanded(
@@ -128,52 +130,25 @@ class _PartyHomeScreenState extends State<PartyDetailScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance),
-            label: 'Lending',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.collections),
-            label: 'Collection',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.print),
-            label: 'Print',
-          ),
+      bottomNavigationBar: CustomBottomNavigationBar2(
+        icons: const [
+          Icons.home,
+          Icons.monetization_on,
+          Icons.payment,
+          Icons.print,
         ],
-        currentIndex: 0, // Set the initial selected index
-        selectedItemColor: Colors.amber[800],
-        backgroundColor: Colors.green, // Set the background color here
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Newhomescreen()),
-              );
-              break;
-            case 1:
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => LendingBasicDetailsScreen()),
-              );
-              break;
-            case 2:
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CollectionScreen()),
-              );
-              break;
-            // Add cases for other navigation items if needed
-          }
-        },
+        labels: const [
+          'Home',
+          'Lending',
+          'Collection',
+          'Print',
+        ],
+        screens: [
+          const Newhomescreen(),
+          LendingBasicDetailsScreen(),
+          CollectionScreen(),
+          Homescreen(),
+        ],
       ),
     );
   }

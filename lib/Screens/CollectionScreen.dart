@@ -80,7 +80,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
           'Collection Screen',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.indigoAccent.shade400,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
